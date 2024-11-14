@@ -1,4 +1,26 @@
-1.Isaac Gym仿真默认在ubuntu20.04（18.04，没试过）下面跑，  windows下记得在WSL Terminal配置环境
+1.Isaac Gym仿真默认在ubuntu20.04（18.04，没试过）下面跑，  windows下在WSL Terminal配置环境
+
+```
+cd sim
+conda create --name kscale-sim-library python=3.8.19
+
+sudo wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /opt/conda-installer.sh
+bash /opt/miniconda-installer.sh
+conda create --name kscale-sim-library python=3.8.19
+eval "$(/home/kjsut/miniconda3/bin/conda shell.bash hook)"
+conda create --name kscale-sim-library python=3.8.19
+conda activate kscale-sim-library
+cd /mnt/d/Codes/zeroth-bot/sim/
+make install-dev
+sudo apt install make
+
+sudo vim /etc/apt/sources.list.tsinghua
+sudo mv /etc/apt/sources.list /etc/apt/sources.list.bac
+sudo mv /etc/apt/sources.list.tsinghua /etc/apt/sources.list
+sudo apt update
+make install-dev
+pip install --verbose -e '.[dev]' --trusted-host mirrors.aliyun.com
+```
 
 <div align="center" style="text-align: center;">
 
