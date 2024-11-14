@@ -1,3 +1,5 @@
+1.Isaac Gym仿真默认在ubuntu20.04（18.04，没试过）下面跑，  windows下记得在WSL Terminal配置环境
+
 <div align="center" style="text-align: center;">
 
   <h1>Zeroth Bot</h1>  (WIP)
