@@ -20,7 +20,32 @@ sudo mv /etc/apt/sources.list.tsinghua /etc/apt/sources.list
 sudo apt update
 make install-dev
 pip install --verbose -e '.[dev]' --trusted-host mirrors.aliyun.com
+
+tar -xvf IsaacGym_Preview_4_Package.tar.gz
+conda env config vars set ISAACGYM_PATH=`pwd`/isaacgym
+conda deactivate
+conda activate kscale-sim-library
+make install-third-party-external
+sudo vim ~/.pip/pip.conf
+pip config list
+export MODEL_DIR=sim/resources/stompymini
+sudo apt install g++
+python sim/train.py --task=stompymini --num_envs=4
+
+sudo wget https://developer.download.nvidia.com/compute/cuda/12.6.2/local_installers/cuda_12.6.2_560.35.03_linux.run
+sudo chmod +x cuda_12.6.2_560.35.03_linux.run
+sudo sh ./cuda_12.6.2_560.35.03_linux.run
+
+nvcc --version
+
 ```
+
+```
+You don't directly install NVIDIA drivers on WSL.
+
+The key to using NVIDIA GPUs in WSL is to install the appropriate NVIDIA driver on your Windows host system. This driver will enable GPU passthrough to your WSL distribution, allowing it to access the GPU's capabilities.
+```
+这是一个悲伤的故事， 宿主机windows cuda装了12.6，不想换了，后续直接切换双系统之ubuntu完成操作.
 
 <div align="center" style="text-align: center;">
 
