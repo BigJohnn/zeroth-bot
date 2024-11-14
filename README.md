@@ -1,3 +1,24 @@
+On Mac Mx, use micromamba , but not conda
+
+```
+micromamba create -n humanoid-os python=3.12
+micromamba activate humanoid-os
+```
+
+then,
+
+```
+python experiments/run.py
+```
+
+Depending on your servo's midpoint settings, you may need to fine-tune the leg offsets in the state_walk function to achieve optimal performance.
+
+To prevent potential damage, it's advisable to restrict the servo's minimum and maximum positions.
+
+Utilize tools like FD.exe or Feetech's Python SDK to configure these limits appropriately.
+
+Note: Currently, only the walking functionality has been tested. Feel free to experiment with other actions, but be prepared to make necessary adjustments to ensure proper operation.
+
 <div align="center" style="text-align: center;">
 
   <h1>Zeroth Bot</h1>  (WIP)

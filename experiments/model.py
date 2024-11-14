@@ -1,6 +1,6 @@
 """Inference script for running the model on the robot
 Run:
-    python experiments/model.py --model_path sim/examples/walking_micro.onnx
+    python experiments/model.py --model_path sim/examples/model_100.onnx
 """
 
 import argparse
@@ -21,7 +21,7 @@ class Sim2simCfg:
         num_actions=10,
         frame_stack=15,
         c_frame_stack=3,
-        sim_duration=60.0,
+        # sim_duration=60.0,
         stiffness=5.0,
         damping=0.3,
         effort=1.0,
@@ -41,10 +41,10 @@ class Sim2simCfg:
 
         self.frame_stack = frame_stack
         self.c_frame_stack = c_frame_stack
-        self.num_single_obs = 11 + self.num_actions * self.c_frame_stack
+        self.num_single_obs = 11 + self.num_actions * 3
         self.num_observations = int(self.frame_stack * self.num_single_obs)
 
-        self.sim_duration = sim_duration
+        # self.sim_duration = sim_duration
         self.dt = dt
         self.decimation = decimation
 
@@ -72,8 +72,9 @@ class cmd:
     dyaw = 0.0
 
 
-def inference(policy: ort.InferenceSession, robot: Robot, data_queue: mp.Queue, stop_event: threading.Event) -> None:
-    cfg = Sim2simCfg()
+def inference(policy: ort.InferenceSession, robot: Robot, data_queue: mp.Queue, stop_event: threading.Event, cfg:Sim2simCfg=None) -> None:
+    if cfg is None:
+        cfg = Sim2simCfg()
 
     print("[INFO]: Starting ONNX model inference...")
 
@@ -173,7 +174,6 @@ def inference(policy: ort.InferenceSession, robot: Robot, data_queue: mp.Queue, 
         desired_positions_dict = {
             name: position for name, position in zip(joint_names, full_action_deg)
         }
-
         # Set desired positions
         robot.set_desired_positions(desired_positions_dict)
 

@@ -34,16 +34,16 @@ class RobotConfig:
     def __init__(self):
         self.joint_configs = [
             # LEGS
-            {'name': "left_hip_pitch", 'servo_id': 10, 'offset_deg': 0.23 * 180/math.pi + 5.0},
-            {'name': "left_hip_yaw", 'servo_id': 9, 'offset_deg': 45.0},
+            {'name': "left_hip_pitch", 'servo_id': 10, 'offset_deg': 0},
+            {'name': "left_hip_yaw", 'servo_id': 9, 'offset_deg': -15.0},
             {'name': "left_hip_roll", 'servo_id': 8, 'offset_deg': 0.0},
-            {'name': "left_knee_pitch", 'servo_id': 7, 'offset_deg': -0.741 * 180/math.pi},
-            {'name': "left_ankle_pitch", 'servo_id': 6, 'offset_deg': -0.5 * 180/math.pi},
-            {'name': "right_hip_pitch", 'servo_id': 5, 'offset_deg': -0.23 * 180/math.pi - 5.0},
-            {'name': "right_hip_yaw", 'servo_id': 4, 'offset_deg': -45.0},
+            {'name': "left_knee_pitch", 'servo_id': 7, 'offset_deg': 0},
+            {'name': "left_ankle_pitch", 'servo_id': 6, 'offset_deg': 0},
+            {'name': "right_hip_pitch", 'servo_id': 5, 'offset_deg': 0},
+            {'name': "right_hip_yaw", 'servo_id': 4, 'offset_deg': 5.0},
             {'name': "right_hip_roll", 'servo_id': 3, 'offset_deg': 0.0},
-            {'name': "right_knee_pitch", 'servo_id': 2, 'offset_deg': 0.741 * 180/math.pi},
-            {'name': "right_ankle_pitch", 'servo_id': 1, 'offset_deg': 0.5 * 180/math.pi},
+            {'name': "right_knee_pitch", 'servo_id': 2, 'offset_deg': 0},
+            {'name': "right_ankle_pitch", 'servo_id': 1, 'offset_deg': 0},
             # ARMS
             {'name': "right_elbow_yaw", 'servo_id': 11, 'offset_deg': 0.0},
             {'name': "right_shoulder_yaw", 'servo_id': 12, 'offset_deg': 0.0},
@@ -59,7 +59,7 @@ class Robot:
     """Controls the robot's hardware and joint movements."""
 
     def __init__(self):
-        self.hal = HAL()
+        self.hal = HAL(host='192.168.199.174')
         self.config = RobotConfig()
         self.joints: List[Joint] = [
             Joint(**joint_config) for joint_config in self.config.joint_configs

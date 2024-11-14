@@ -5,10 +5,9 @@ import math
 import threading
 import multiprocessing as mp
 import onnxruntime as ort
-from model import inference
+from model import inference, Sim2simCfg
 from plot import run_dashboard
 import os
-
 
 def state_zero_positions(robot: Robot) -> bool:
     print("Zeroing positions")
@@ -46,16 +45,20 @@ def state_stand(robot: Robot) -> bool:
 def state_walk(robot: Robot, stop_event: threading.Event) -> bool:
     print("Walking")
     print("Restoring original offsets")
-    robot.joint_dict["left_hip_pitch"].offset_deg = 0.23 * 180/math.pi
-    robot.joint_dict["left_hip_yaw"].offset_deg = 45.0
-    robot.joint_dict["left_hip_roll"].offset_deg = 0.0
-    robot.joint_dict["left_knee_pitch"].offset_deg = -0.741 * 180/math.pi
-    robot.joint_dict["left_ankle_pitch"].offset_deg = -0.5 * 180/math.pi
-    robot.joint_dict["right_hip_pitch"].offset_deg = -0.23 * 180/math.pi
-    robot.joint_dict["right_hip_yaw"].offset_deg = -45.0
-    robot.joint_dict["right_hip_roll"].offset_deg = 0.0
-    robot.joint_dict["right_knee_pitch"].offset_deg = 0.741 * 180/math.pi
-    robot.joint_dict["right_ankle_pitch"].offset_deg = 0.5 * 180/math.pi
+     # 1-5
+    robot.joint_dict["right_ankle_pitch"].offset_deg =30
+    robot.joint_dict["right_knee_pitch"].offset_deg = 23
+    robot.joint_dict["right_hip_roll"].offset_deg = 0
+    robot.joint_dict["right_hip_yaw"].offset_deg = 5
+    robot.joint_dict["right_hip_pitch"].offset_deg = 1
+    # 6-10
+    robot.joint_dict["left_ankle_pitch"].offset_deg = -25
+    robot.joint_dict["left_knee_pitch"].offset_deg = 15
+    robot.joint_dict["left_hip_roll"].offset_deg = -38
+    robot.joint_dict["left_hip_yaw"].offset_deg = -45
+    robot.joint_dict["left_hip_pitch"].offset_deg = 0
+
+    # 11-16
     robot.joint_dict["right_elbow_yaw"].offset_deg = 0.0
     robot.joint_dict["right_shoulder_yaw"].offset_deg = 0.0
     robot.joint_dict["right_shoulder_pitch"].offset_deg = 0.0
@@ -65,14 +68,23 @@ def state_walk(robot: Robot, stop_event: threading.Event) -> bool:
 
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    model_path = os.path.join(current_dir, "..", "sim", "examples", "walking_micro.onnx")
+    model_path = os.path.join(current_dir, "model", "gait_on_wave_terrain_genesis_100itr.onnx")
     if not os.path.isfile(model_path):
         print(f"Model file not found at {model_path}")
         return False
     
     policy = ort.InferenceSession(model_path)
-    data_queue = run_dashboard()
-    inference(policy, robot, data_queue, stop_event)
+    mp.freeze_support()
+    ctx = mp.get_context('spawn')
+    data_queue = ctx.Queue()
+    cfg = Sim2simCfg(
+        num_actions=10,
+        dt=0.001,
+        decimation=20,
+        frame_stack=1,
+        c_frame_stack=1,
+    )
+    inference(policy, robot, data_queue, stop_event, cfg)
     
     return True
 
