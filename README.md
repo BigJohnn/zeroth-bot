@@ -46,6 +46,7 @@ You don't directly install NVIDIA drivers on WSL.
 The key to using NVIDIA GPUs in WSL is to install the appropriate NVIDIA driver on your Windows host system. This driver will enable GPU passthrough to your WSL distribution, allowing it to access the GPU's capabilities.
 ```
 这是一个悲伤的故事， 宿主机windows cuda装了12.6，不想换了，后续直接切换双系统之ubuntu完成操作.
+当然使用docker也是理论上木有问题的。
 
 <div align="center" style="text-align: center;">
 
