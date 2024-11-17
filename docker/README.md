@@ -1,3 +1,19 @@
+Below only works with **headless** mode, thus please goto https://github.com/BigJohnn/sim/tree/master/docker, which use x11 forward to display gui on your host env.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Move this docker dir into zeroth-bot/sim # not sim/sim
 
 Terminal1:
