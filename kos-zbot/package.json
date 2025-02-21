@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "gitlab-ci-local": "^4.57.0",
+    "re2": "^1.21.4"
+  }
+}

@@ -37,7 +37,33 @@ SSH:
 `ssh root@192.168.42.1`
 
 4. Build Runtime
+
+in kos/src/daemon.rs,
+
+```
+async fn run_server(
+    // platform: &(dyn Platform + Send + Sync),
+    platform: &(dyn Platform),
+```
+
+on windows, 
+to resolve 
+```
+error: unable to create file buildroot-2021.05/dl/musl-compat-headers/queue.h?rev=1.70: Invalid argument
+error: unable to create file buildroot-2021.05/dl/spidev_test/spidev_test.c?id=v5.4: Invalid argument
+```
+should do
+```
+git config --global core.protectNTFS false
+git submodule update --init --recursive --force
+git config --global core.protectNTFS true
+```
+then, 
 ```bash
+cd /usr/local/lib/node_modules/gitlab-ci-local/node_modules/re2
+sudo chmod 777 -R /usr/local/lib/node_modules/gitlab-ci-local/node_modules/re2
+node-gyp configure
+node-gyp build
 cargo check && gitlab-ci-local # check and build
 ```
 
